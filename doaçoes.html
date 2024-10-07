@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Doações - Centro Espírita Paz e Amor</title>
+    <link rel="stylesheet" href="/css/style3.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.qrcode/1.0/jquery.qrcode.min.js"></script>
+  </head>
+  <body>
+    <div class="container" id="donationPage">
+      <h1>Doações</h1>
+      <div class="donation-options">
+        <button onclick="showDonationForm()">Doar Agora</button>
+        <p>Formas de pagamento:Boleto e Pix.</p>
+      </div>
+      <h2>Doações Presenciais</h2>
+      <p>
+        Para agendar a entrega de itens como roupas, brinquedos e alimentos,
+        entre em contato pelo telefone: (31) 3330-6200 ou pelo e-mail:
+        uemmg@uemmg.org.br.
+      </p>
+      <h2>Transparência</h2>
+      <div>
+        <p>Utilização dos recursos arrecadados:</p>
+        <ul>
+          <li>Oferta mensal de cestas básicas</li>
+          <li>Oferta semanal de legumes, frutas e ovos</li>
+          <li>Preparo e distribuição de sopa</li>
+          <li>
+            Atendimento a pessoas em situação de rua (banho, corte de cabelo,
+            barba e alimentação)
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="container hidden" id="donationForm">
+      <h1>Cadastro de Doação</h1>
+      <form onsubmit="return handleDonation(event)">
+        <input type="text" placeholder="Seu Nome" required />
+        <input type="email" placeholder="Seu Email" required />
+        <input type="number" placeholder="Valor da Doação" required />
+        <select id="paymentMethod" required onchange="showPaymentDetails()">
+          <option value="">Forma de Pagamento</option>
+          <option value="boleto">Boleto</option>
+          <option value="pix">Pix</option>
+        </select>
+        <div id="pixDetails" class="hidden">
+          <div class="qr-code" id="qrcode"></div>
+          <p>Escaneie o QR Code para fazer a doação.</p>
+        </div>
+        <div id="boletoDetails" class="hidden">
+          <p>
+            Após a confirmação da doação, você receberá o boleto por e-mail.
+          </p>
+        </div>
+        <button type="submit">Concluir Doação</button>
+      </form>
+      <button onclick="showDonationPage()">Voltar</button>
+    </div>
+
+    <div class="container hidden" id="successMessage">
+      <h1>Doação Concluída!</h1>
+      <p class="success-message">
+        Sua doação foi realizada com sucesso. Agradecemos pelo seu apoio!
+      </p>
+      <button onclick="showDonationPage()">Voltar para Tela Principal</button>
+    </div>
+
+    <script>
+      function showDonationForm() {
+        document.getElementById("donationPage").classList.add("hidden");
+        document.getElementById("donationForm").classList.remove("hidden");
+      }
+
+      function showDonationPage() {
+        document.getElementById("donationForm").classList.add("hidden");
+        document.getElementById("successMessage").classList.add("hidden");
+        document.getElementById("donationPage").classList.remove("hidden");
+        // Limpar campos ao voltar
+        document.getElementById("donationForm").reset();
+        hidePaymentDetails();
+        $("#qrcode").empty();
+      }
+
+      function showPaymentDetails() {
+        const paymentMethod = document.getElementById("paymentMethod").value;
+        hidePaymentDetails();
+        if (paymentMethod === "pix") {
+          document.getElementById("pixDetails").classList.remove("hidden");
+          generateQRCode("12.345.678/0001-90"); // CNPJ da instituição
+        } else if (paymentMethod === "boleto") {
+          document.getElementById("boletoDetails").classList.remove("hidden");
+        }
+      }
+
+      function hidePaymentDetails() {
+        document.getElementById("pixDetails").classList.add("hidden");
+        document.getElementById("boletoDetails").classList.add("hidden");
+      }
+
+      function generateQRCode(data) {
+        $("#qrcode").qrcode({
+          text: data,
+          width: 128,
+          height: 128,
+        });
+      }
+
+      function handleDonation(event) {
+        event.preventDefault();
+        document.getElementById("donationForm").classList.add("hidden");
+        document.getElementById("successMessage").classList.remove("hidden");
+      }
+    </script>
+    <img scr="/img"
+  </body>
+</html>
